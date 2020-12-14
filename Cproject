@@ -1,0 +1,302 @@
+/*텀프로젝트
+19133474 문지원
+C언어자판기프로그램*/
+#include <stdio.h>
+#include <stdlib.h>
+#include <windows.h>
+
+#define true 1
+#define false 0
+
+int item[8] = {10,10,10,10,10,10,10,10}; // 자판기내 음료수개수
+int money = 0, sales = 0;  // {money : 투입된 돈},  {sales : 총매출}
+char choose = ' ' // key 선택
+
+
+// 콘솔창옵션
+void console() {
+    system("mode con cols=43 lines=33"); // 콘솔창크기지정
+}
+void title() { //머리부분
+    puts("★★★★★★★★★★★★★★★★★★★★★");
+    puts("★★★★★★★DCU 음료자판기★★★★★★★");
+    puts("★★★★★★★★★★★★★★★★★★★★★");
+    puts("-------------------------------------------");
+    puts("◆제품또는메뉴를입력해주세요◆");
+    puts("-------------------------------------------");
+}
+
+void menu() { //메뉴부분
+    if (item[0]>0){  //재고가 1개이상일 때 재고수표시
+        printf("☞1번: [ %d ] 코카콜라<1000원>\n", item[0]);
+    }
+    else{    //재고가 없을시 재고없을을 표시한다.
+        printf("☞1번: [ 재고없음] 코카콜라<1000원>\n");
+    }
+    if (item[1]>0){
+        printf("☞2번: [ %d ] 사이다<1000원>\n", item[1]);
+    }
+    else{
+        printf("☞2번: [ 재고없음] 사이다<1000원>\n");
+    }
+    if (item[2]>0){
+        printf("☞3번: [ %d ] 박카스<800원>\n", item[2]);
+    }
+    else{
+        printf("☞3번: [ 재고없음] 박카스<800원>\n");
+    }
+    if (item[3]>0){
+        printf("☞4번: [ %d ] 밀키스<1000원>\n", item[3]);
+    }
+    else{
+        printf("☞4번: [ 재고없음] 밀키스<1000원>\n");
+    }
+    if(item[4]>0){
+        printf("☞5번: [ %d ] 감귤쥬스<900원>\n", item[4]);
+    }
+    else{
+        printf("☞5번: [ 재고없음] 감귤쥬스<900원>\n");
+    }
+    if (item[5] > 0){
+        printf("☞6번: [ %d ] 레몬녹차<900원>\n", item[5]);
+    }
+    else {
+        printf("☞6번: [ 재고없음] 레몬녹차<900원>\n");
+    }
+    if (item[6] > 0) {
+        printf("☞7번: [ %d ] 옥수수수염차<1500원>\n", item[6]);
+    }
+    else {
+        printf("☞7번: [ 재고없음] 옥수수수염차<1500원>\n");
+    }
+    if (item[7] > 0]) {
+        printf("☞8번: [ %d ] 초코에몽<1000원>\n", item[7]);
+    }
+    else {
+        printf("☞8번: [ 재고없음] 초코에몽<1000원>\n");
+    }
+}
+
+void select1() { 
+    puts("-------------------------------------------");
+    printf("◈현재투입한총금액: %d원입니다.◈\n", money);
+    puts("-------------------------------------------");
+    puts("※※※※메뉴키(key) 안내※※※※");
+    puts("-------------------------------------------");
+    puts("☞a<A> : 10원짜리동전투입");
+    puts("☞b<B> : 50원짜리동전투입");
+    puts("☞c<C> : 100원짜리동전투입");
+    puts("☞d<D> : 500원짜리동전투입");
+}
+
+void select2() {
+    puts("-------------------------------------------");
+    puts("☞q<Q> : 동전반환");
+    puts("☞w<W> : 자판기판매매출보기");
+    puts("☞e<E> : 자판기판매매출초기화");
+    puts("-------------------------------------------");
+    puts("☞x<X> : 프로그램종료");
+    puts("-------------------------------------------");
+    puts("★★★★★★★★★★★★★★★★★★★★★");
+    printf("◈key를입력하세요: \n");
+}
+void after_buy(){  //제품구매후 출력하는 함수
+    Sleep(1000);
+    printf("선택하신제품을결제하였습니다.\n구매해주셔서감사합니다.\n");
+    Sleep(2000);
+}
+// 동전투입함수
+void insert_money(char choose) {
+    if (choose == 'a' || choose == 'A') {  // 10원투입
+        money += 10;
+    }
+    else if (choose == 'b' || choose == 'B') {  // 50원투입
+        money += 50;
+    }
+    else if (choose == 'c' || choose == 'C') {  // 100원투입
+        money += 100;
+    }
+    else if (choose == 'd' || choose == 'D') {  // 500원투입
+        money += 500;
+    }
+}
+
+// 음료수선택함수
+void buy_product(char choose) {
+    if (choose == '1') {  //코카콜라 1000원구매
+        if (money >= 1000 && item[0] > 0) {  // 현재 돈과 재고를 만족할때
+            money -= 1000;//-1000원
+            item[0] -= 1;//재고-1개
+            sales += 1000;//매출+1000원
+            printf("코카콜라를선택하셨습니다.\n\n");
+            after_buy();
+        }
+        else if (item[0] > 0) {  // 재고만 만족할때
+            printf("돈이부족합니다.\n");
+            Sleep(1000);  // 프로그램 1초딜레이
+        }
+        else {  // 둘다 만족못할때
+            printf("재고가없습니다.\n");
+            Sleep(1000);  // 프로그램 1초딜레이
+        }
+    }
+    else if (choose == '2') { // 사이다 1000원구매
+        if (money >= 1000 && item[1] > 0) {  // 현재 돈과 재고를 만족할때
+            money -= 1000;
+            item[1] -= 1;
+            sales += 1000;
+            printf("사이다를선택하셨습니다.\n\n");
+            after_buy();
+        }
+        else if(item[1]>0) {  // 재고만 만족할때
+            printf("돈이부족합니다.\n");
+            Sleep(1000);  // 프로그램 1초딜레이
+        }
+        else {  // 둘다 만족못할때
+            printf("재고가없습니다.\n");
+            Sleep(1000);
+        }
+    }
+    else if (choose == '3') {  // 박카스 800원구매
+        if (money >= 800 && item[2] > 0) {  // 현재 돈과 재고를 만족할때
+            money -= 800;  
+            item[2] -= 1;
+            sales += 800;   
+            printf("박카스를선택하셨습니다.\n\n");
+            after_buy();
+        }
+        else if(item[2]>0){  // 재고만 만족할때
+            printf("돈이부족합니다.\n");
+            Sleep(1000);  // 프로그램 1초딜레이
+        }
+        else {  // 둘다 만족못할때
+            printf("재고가없습니다.\n");
+            Sleep(1000);
+        }
+    }
+    else if (choose == '4') {  // 밀키스 1000원구매
+        if (money >= 1000 && item[3] > 0) {  // 현재 돈과 재고를 만족할때
+            money -= 1000;
+            tem[3] -= 1;
+            sales += 1000;
+            printf("밀키스를선택하셨습니다.\n\n");
+            after_buy();
+        }
+        else if(item[3] > 0){  // 재고만 만족할때
+            printf("돈이부족합니다.\n");
+            Sleep(1000);  // 프로그램 1초딜레이
+        }
+        else {  // 둘다 만족못할때
+            printf("재고가없습니다.\n");
+            Sleep(1000);
+        }
+    }
+    else if (choose == '5') {  // 감귤쥬스 900원구매
+        if (money >= 900 && item[4] > 0) {  // 현재 돈과 재고를 만족할때
+            money -= 900;
+            item[4] -= 1;
+            sales += 900;
+            printf("감귤쥬스를선택하셨습니다.\n\n");
+            after_buy();
+        }
+        else if(item[4] > 0) {  // 재고만 만족할때
+            printf("돈이부족합니다.\n");
+            Sleep(1000);  // 프로그램 1초딜레이
+        }
+        else {  // 둘다 만족못할때
+            printf("재고가없습니다.\n");
+            Sleep(1000);  // 프로그램 1초딜레이
+        }
+    }
+    else if (choose == '6') {  // 레몬녹차 900원구매 
+        if (money >= 900 && item[5] > 0) {  // 현재 돈과 재고를 만족할때
+            money -= 900;
+            item[5] -= 1;
+            sales += 900;
+            printf("레몬녹차를선택하셨습니다.\n\n");
+            after_buy();
+        }
+        else if(item[5] > 0) {  // 재고만 만족할때
+            printf("돈이부족합니다.\n");
+            Sleep(1000);  // 프로그램 1초딜레이
+        }
+        else {  // 둘다 만족못할때
+            printf("재고가없습니다.\n");
+            Sleep(1000); // 프로그램 1초딜레이
+        }
+    }
+    else if (choose == '7') { // 옥수수수염차 1500원구매
+        if (money >= 1500 && item[6] > 0) {  // 현재 돈과 재고를 만족할때
+            money -= 1500;
+            item[6] -= 1;
+            sales += 1500;
+            printf("옥수수수염차를선택하셨습니다.\n\n");
+            after_buy();
+        }
+        else if(item[6]>0) {  // 재고만 만족할때
+            printf("돈이부족합니다.\n");
+            Sleep(1000);  // 프로그램 1초딜레이
+        }
+        else {  // 둘다 만족못할때
+            printf("재고가없습니다.\n");
+            Sleep(1000);
+        }
+    }
+    else if (choose == '8') { // 초코에몽 1000원구매
+        if (money >= 1000 && item[7] > 0) {  // 현재 돈과 재고를 만족할때
+            money -= 1000;
+            item[7] -= 1;
+            sales += 1000;
+            printf("초코에몽을선택하셨습니다.\n\n");
+            after_buy();
+        }
+        else if(item[7]>0) {  // 재고만 만족할때
+            printf("돈이부족합니다.\n");
+            Sleep(1000);  // 프로그램 1초딜레이
+        }
+        else {  // 둘다 만족못할때
+            printf("재고가없습니다.\n");
+            Sleep(1000); //프로그램 1초딜레이
+        }
+    }
+}
+// 자판기설정함수
+void options(char choose) {
+    if (choose == 'q' || choose == 'Q') {  //동전반환
+        printf("거스름돈: %d원\n", money);
+        money = 0;
+        Sleep(2000);  // 프로그램 2초딜레이
+    }
+    if (choose == 'w' || choose == 'W') {  // 자판기판매 매출보기
+        printf("자판기총매출: %d원\n", sales);
+        Sleep(3000);  // 프로그램 3초딜레이
+    }
+    if (choose == 'e' || choose == 'E') {  // 자판기판매매출 초기화
+        sales = 0;
+        puts("매출이초기화되었습니다.");
+        Sleep(2000);  // 프로그램2초딜레이
+    }
+}
+
+void all() { // 자판기프로그램 전체레이아웃
+    title();
+    menu();
+    select1();
+    select2();
+}
+
+int main() {
+    console();
+    while (true) { //프로그램을 종료할때까지 반복
+        all();
+        scanf_s("%c", &choose);
+        insert_money(choose);
+        buy_product(choose);
+        options(choose);
+        if (choose == 'x' || choose == 'X') {  // 자판기프로그램 종료
+            puts("시스템을종료합니다.");
+            break
+        }
+    }
+    return 0;
+}
