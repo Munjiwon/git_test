@@ -1,0 +1,31 @@
+#include <stdio.h>
+
+int main(void) {
+    
+    int i, j;
+    int score[4][5] = {0};
+    
+    for (i = 0; i < 4; i++) {
+        printf("%d번째 학생 점수 입력 : ", i + 1);
+        for (j = 0; j < 4; j++) {
+            scanf("%d", &score[i][j]);
+            score[i][4] += score[i][j];
+        }
+    }
+    printf("   국어 영어 수학 과학 총점  합격\n");
+    for (i = 0; i < 4; i++) {
+        printf("%d ", i + 1);
+        for (j = 0; j < 5; j++) {
+            printf("%4d", score[i][j]);
+        }
+        if(score[i][4]/4 >= 90) {
+                printf("  합격");
+        }
+        else{
+            printf(" 불합격");
+        }
+        printf("\n");
+    }
+    
+    return 0;
+}
