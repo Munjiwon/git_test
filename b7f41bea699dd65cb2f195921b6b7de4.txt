@@ -1,0 +1,45 @@
+#include <stdio.h>
+
+// 알고리즘 A: sum = n(n+1)/2
+long long int algorithmA(long long int n) {
+    long long int sum = n * (n + 1) / 2;
+    return sum;
+}
+
+// 알고리즘 B: sum = 1 + 2 + ... + n
+long long int algorithmB(long long int n) {
+    long long int sum = 0;
+    for (int i = 1; i <= n; i++) {
+        sum += i;
+    }
+    return sum;
+}
+
+// 알고리즘 C: sum = (1) + (1 + 1) + (1 + 1 + 1) + ..., (1 + 1 + ... + 1)
+long long int algorithmC(long long int n) {
+    long long int sum = 0;
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= i; j++) {
+            sum += 1;
+        }
+    }
+    return sum;
+}
+
+int main() {
+    long long int n_values[3] = {};
+    for(int a = 0; a < 3; a++) {
+        //printf("Array %d value :", a);
+        scanf("%lld", &n_values[a]);
+
+    }
+    //printf("AlgorithmA      AlgorithmB      AlgorithmC      Value_n\n");
+
+    for (int i = 0; i < sizeof(n_values) / sizeof(n_values[0]); i++) {
+        printf("%lld %lld %lld %lld\n",
+               algorithmA(n_values[i]),
+               algorithmB(n_values[i]),
+               algorithmC(n_values[i]),  n_values[i]);
+    }
+    return 0;
+}
